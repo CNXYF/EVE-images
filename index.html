@@ -119,13 +119,21 @@
 
         /* 成员头像样式 */
         .member-avatar {
-            width: 100px; /* 固定宽度 */
-            height: 100px; /* 固定高度 */
-            border-radius: 50%; /* 圆形 */
-            object-fit: cover; /* 图片内容覆盖整个容器 */
-            margin-bottom: 1rem; /* 下方间距 */
-            border: 2px solid #4CAF50; /* 绿色边框 */
-        }
+    /* 1. 调整尺寸：从 100px 改大，看起来更像卡片 */
+    width: 150px; 
+    height: 150px; 
+
+    /* 2. 修改形状：从 圆形(50%) 改为 方形圆角 */
+    /* 你截图里的效果大概是 12px 到 16px 的圆角 */
+    border-radius: 15px; 
+
+    /* 3. 保持这个属性不变：它能确保图片不变形 */
+    object-fit: cover; 
+    
+    /* 其他保持原样 */
+    margin-bottom: 1rem; 
+    border: 2px solid #4CAF50; 
+}
 
         /* 成员昵称样式 */
         .member-name {
