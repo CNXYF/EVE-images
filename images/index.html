@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golden Fleece 金羊毛骑士团</title>
+    <style>
+        /* CSS样式重置，清除默认边距和填充 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 设置body的基本样式 */
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;  /* 支持中文 */
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;              /* 最小高度为全屏 */
+            color: white;                    /* 白色文字 */
+        }
+
+        /* 背景容器，用于实现随鼠标移动的视觉效果 */
+        #background-container {
+            position: fixed; /* 固定定位，不随页面滚动 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* 放在其他元素后面 */
+            /* 设置破碎星空风格的背景图片 */
+            background-image: url('https://img.alicdn.com/imgextra/i3/O1CN01WZQqgV1tGcYzZqLmJ_!!6000000005754-2-tps.png');
+            background-size: cover; /* 覆盖整个容器 */
+            background-position: center; /* 居中对齐 */
+            background-repeat: no-repeat; /* 不重复 */
+            transition: transform 0.1 ease-out; /* 移动时的平滑过渡效果 */
+        }
+
+        /* 顶部导航栏样式 */
+        nav {
+            position: fixed; /* 固定在顶部 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #2c2c2c; /* 深灰色背景 */
+            padding: 1rem 0; /* 上下内边距 */
+            z-index: 1000; /* 确保在最顶层 */
+            display: flex;
+            justify-content: center; /* 内容居中 */
+        }
+
+        /* 导航栏内的无序列表样式 */
+        nav ul {
+            list-style-type: none; /* 去掉列表项标记 */
+            display: flex; /* 使用弹性布局 */
+            gap: 2rem; /* 列表项之间的间距 */
+        }
+
+        /* 导航链接样式 */
+        nav li a {
+            color: white; /* 白色文字 */
+            text-decoration: none; /* 去掉下划线 */
+            font-size: 1.2rem; /* 字体大小 */
+            transition: color 0.3; /* 颜色变化的过渡效果 */
+        }
+
+        /* 导航链接悬停效果 */
+        nav li a:hover {
+            color: #4CAF50; /* 悬停时变为绿色 */
+        }
+
+        /* 主内容区域样式 */
+        main {
+            padding-top: 80px; /* 为固定导航栏预留空间 */
+            min-height: calc(100vh - 80px); /* 内容最小高度为视窗高度减去导航栏高度 */
+            padding-bottom: 60px; /* 为底部版权区预留空间 */
+        }
+
+        /* 各个内容板块的通用样式 */
+        section {
+            max-width: 1200px; /* 最大宽度限制 */
+            margin: 0 auto; /* 左右居中 */
+            padding: 2rem; /* 内边距 */
+            background-color: rgba(0, 0, 0, 0.5); /* 半透明白色背景，增强文字可读性 */
+            margin-bottom: 2rem; /* 板块下方间距 */
+            border-radius: 8px; /* 圆角 */
+        }
+
+        /* 板块标题样式 */
+        h2 {
+            font-size: 2rem; /* 标题字体大小 */
+            margin-bottom: 1rem; /* 下方间距 */
+            color: #4CAF50; /* 绿色标题 */
+        }
+
+        /* 段落文字样式 */
+        p {
+            font-size: 16px; /* 字体大小 */
+            line-height: 1.5; /* 行高 */
+            color: #ffffff; /* 白色文字 */
+        }
+
+        /* 成员介绍列表的网格布局 */
+        #members-list {
+            display: grid; /* 使用CSS Grid布局 */
+            /* 自适应列数，每列最小300px，最大1fr（剩余空间） */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem; /* 网格项之间的间距 */
+        }
+
+        /* 单个成员卡片样式 */
+        .member-card {
+            background-color: rgba(44, 44, 44, 0.7); /* 半透明深灰色背景 */
+            padding: 1rem; /* 内边距 */
+            border-radius: 8px; /* 圆角 */
+            text-align: center; /* 文字居中 */
+        }
+
+        /* 成员头像样式 */
+        .member-avatar {
+            width: 100px; /* 固定宽度 */
+            height: 100px; /* 固定高度 */
+            border-radius: 50%; /* 圆形 */
+            object-fit: cover; /* 图片内容覆盖整个容器 */
+            margin-bottom: 1rem; /* 下方间距 */
+            border: 2px solid #4CAF50; /* 绿色边框 */
+        }
+
+        /* 成员昵称样式 */
+        .member-name {
+            font-size: 20px; /* 字体大小 */
+            color: #ffffff; /* 白色文字 */
+            margin-bottom: 0.5rem; /* 下方间距 */
+        }
+
+        /* 成员简介样式 */
+        .member-bio {
+            font-size: 14px; /* 字体大小 */
+            color: #ffffff; /* 白色文字 */
+        }
+
+        /* 表单样式 */
+        form {
+            display: flex; /* 使用弹性布局 */
+            flex-direction: column; /* 垂直排列 */
+            gap: 1rem; /* 元素之间的间距 */
+        }
+
+        /* 表单输入框样式 */
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"] {
+            padding: 0.8rem; /* 内边距 */
+            border: none; /* 去掉默认边框 */
+            border-radius: 4px; /* 圆角 */
+            background-color: rgba(255, 255, 255, 0.1); /* 半透明白色背景 */
+            color: white; /* 白色文字 */
+            font-size: 1rem; /* 字体大小 */
+        }
+
+        /* 输入框获得焦点时的样式 */
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus {
+            outline: none; /* 去掉默认轮廓 */
+            background-color: rgba(255, 255, 255, 0.2); /* 更亮一些的背景 */
+        }
+
+        /* 提交按钮样式 */
+        button {
+            padding: 0.8rem 1.5rem; /* 内边距 */
+            background-color: #4CAF50; /* 绿色背景 */
+            color: white; /* 白色文字 */
+            border: none; /* 去掉边框 */
+            border-radius: 4px; /* 圆角 */
+            cursor: pointer; /* 鼠标悬停时变为手型 */
+            font-size: 1rem; /* 字体大小 */
+            transition: background-color 0.3; /* 背景色变化的过渡效果 */
+        }
+
+        /* 按钮悬停效果 */
+        button:hover {
+            background-color: #45a049; /* 按钮悬停时稍暗一些的绿色 */
+        }
+
+        /* 版权信息区域样式 */
+        footer {
+            position: fixed; /* 固定在底部 */
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #2c2c2c; /* 深灰色背景 */
+            color: white; /* 白色文字 */
+            text-align: center; /* 文字居中 */
+            padding: 1rem 0; /* 上下内边距 */
+            z-index: 1000; /* 确保在最顶层 */
+        }
+
+        /* 下拉菜单样式 */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #2c2c2c;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 1001; /* 确保在导航栏之上 */
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-menu li a {
+            padding: 12px 16px;
+            display: block;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .dropdown-menu li a:hover {
+            background-color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景容器 -->
+    <div id="background-container"></div>
+    
+    <!-- 顶部导航栏 -->
+    <nav>
+        <ul>
+            <li><a href="#home">首页</a></li>
+            <li><a href="#history">军团历史</a></li>
+            <li><a href="#members">成员介绍</a></li>
+            <li><a href="#join">加入我们</a></li>
+            <li class="dropdown">
+                <a href="#links">常用网址</a>
+                <ul class="dropdown-menu">
+                    <li><a href="https://www.eveonline.com">EVE Online官网</a></li>
+                    <li><a href="https://zkillboard.com">zKillboard</a></li>
+                    <li><a href="https://evewho.com">EVE Who</a></li>
+                    <li><a href="https://evemaps.dotlan.net">Dotlan Maps</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- 主要内容区域 -->
+    <main>
+        <!-- 首页板块 -->
+        <section id="home">
+            <div style="display: flex; align-items: center;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background-color: white; display: flex; align-items: center; justify-content: center; margin-right: 10px; border: 2px solid #ddd;">⚔️</div>
+                <div>
+                    <h2>Golden Fleece<br>金羊毛骑士团</h2>
+                </div>
+            </div>
+            <p>欢迎来到EVE Online中最传奇的军团之一。我们致力于探索未知星域，征服挑战性的内容，并建立坚不可摧的兄弟情谊。</p>
+        </section>
+
+        <!-- 军团历史板块 -->
+        <section id="history">
+            <h2>军团历史</h2>
+            <p>金羊毛骑士团成立于CCP宇宙的动荡时期，由一群志同道合的探险者和战士创立。我们从一个小小的海盗团伙起步，凭借着勇气、智慧和对胜利的渴望，逐步扩张势力范围。历经无数次星际战争和政治博弈，我们已成为银河系中一股不可忽视的力量。我们的旗帜飘扬在最危险的0.0星域，我们的传说在每一个飞行员的口中流传。</p>
+        </section>
+
+        <!-- 成员介绍板块 -->
+        <section id="members">
+            <h2>成员介绍</h2>
+            <!-- 成员列表 -->
+            <div id="members-list">
+                <div class="member-card">
+                    <!-- 成员头像 -->
+                    <img src="images/十六鸡.jpg" alt="队长Avatar" class="member-avatar">
+                    <div class="member-name">十六鸡</div>
+                    <div class="member-name">Sakura ly</div>
+                    <div class="member-bio">军团现任CEO，军团制造大佬。</div>
+                </div>
+                <div class="member-card">
+                    <img src="https://cdn.jsdelivr.net/CNXYF/EVE-images/blob/main/%E5%92%B8%E9%B1%BC%E7%8E%8B.jpg" alt="副官Avatar" class="member-avatar">
+                    <div class="member-name">咸鱼王</div>
+                    <div class="member-bio">军团创始人，太上皇。</div>
+                </div>
+                <div class="member-card">
+                    <img src="https://cdn.jsdelivr.net/CNXYF/EVE-images/blob/main/%E5%B0%8F%E5%AD%A9.jpg" alt="工程师Avatar" class="member-avatar">
+                    <div class="member-name">小孩</div>
+                    <div class="member-bio">军团反收割FC，战斗狂热人员，solo大佬。</div>
+                </div>
+                <div class="member-card">
+                    <img src="https://cdn.jsdelivr.net/CNXYF/EVE-images/blob/main/%E6%B7%B7%E6%B2%8C.png" alt="工程师Avatar" class="member-avatar">
+                    <div class="member-name">混沌</div>
+                    <div class="member-bio">军团矿头。</div>
+                </div>
+                <div class="member-card">
+                    <img src="https://cdn.jsdelivr.net/CNXYF/EVE-images/blob/main/%E5%B0%8F%E6%9F%93.jpg" alt="工程师Avatar" class="member-avatar">
+                    <div class="member-name">小染</div>
+                    <div class="member-bio">网页制作人员。</div>
+                </div>
+                <div class="member-card">
+                    <img src="https://cdn.jsdelivr.net/CNXYF/EVE-images/blob/main/%E5%B0%8F%E6%9F%93.jpg" alt="工程师Avatar" class="member-avatar">
+                    <div class="member-name">Engineer_Name</div>
+                    <div class="member-bio">军团工程师，负责舰船维护与升级。</div>
+                </div>
+            </div>
+        </section>
+        
+         <!-- 军团福利板块 -->
+        <section id="福利">
+              <h2>军团福利</h2>
+              <p>加入金羊毛骑士团，你将享受到以下福利：</p>
+              <ul>
+                 <li>1.入团后发放基础技能书和脑插</li>
+                 <li>2.入团完成seat登记后发放登记奖励（免费号1e，付费号2E）</li>
+                 <li>3.入团完成相关教程后免费发放打捞牵引船及mtu</li>
+                 <li>4.入团后刷怪狂怒无限续杯</li>
+                 <li>5.入团一周后发放基础战斗船只</li>
+                 <li>6.军团固定10%，没有黑煤窑的后顾之忧</li>
+                 <li>7.提供内部价常规及旗舰</li>
+                 <li>8.提供军团PVP补损更有联盟srp，一次战斗2份补损，直接战斗爽</li>
+                 <li>9.每周定期开展收割或其他娱乐活动</li>
+            </ul>
+        </section>
+
+        <!-- 生产板块 -->
+<section id="生产" style="text-indent: 2em;">
+    <h2>军团生产</h2>
+
+    <!-- 第一段 -->
+    <p>
+        公司前身国服移民军团金牛毛骑士团。军团驻地位处北塔南部，驻地天使怪，隔壁苏少怪，大量高安等星系可供生产。蜜蜂境内全境异常共享，随意生产，再也不用担心生产人挤人。
+    </p>
+
+    <!-- 第二段 -->
+    <p>
+        团内炸鱼电鱼队数量充足，鱼队打捞点有共享文件夹，新人打捞3天出月卡直接躺浆自由（已有两批5+新人毕业开工掠夺）。每周开组收割，抢Boss，偷穴以及其他娱乐活动战斗时多角度录制视频，剪辑高光时刻发布，今天你就是主角。出勤尽力即可，没有强制性的超高要求。
+    </p>
+
+    <!-- 第三段 -->
+    <p>
+        团内关系融洽没有小团体，让你感受到家一样的氛围。
+    </p>
+</section>
+    
+    <!-- 版权信息 -->
+    <footer>
+        <p>&copy; 2023 Golden Fleece 金羊毛骑士团. All rights reserved.</p>
+    </footer>
+    
+    <!-- JavaScript for background effect -->
+    <script>
+        // 获取背景容器元素
+        const backgroundContainer = document.getElementById('background-container');
+        // 监听鼠标移动事件
+        document.addEventListener('mousemove', (e) => {
+            // 计算鼠标位置相对于窗口的百分比
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+            // 根据鼠标位置调整背景的变换
+            backgroundContainer.style.transform = `translate(-${x / 10}px, -${y / 10}px)`;
+        });
+    </script>
+</body>
+</html>
+
