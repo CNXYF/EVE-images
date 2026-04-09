@@ -148,50 +148,6 @@
             color: #ffffff; /* 白色文字 */
         }
 
-        /* 表单样式 */
-        form {
-            display: flex; /* 使用弹性布局 */
-            flex-direction: column; /* 垂直排列 */
-            gap: 1rem; /* 元素之间的间距 */
-        }
-
-        /* 表单输入框样式 */
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"] {
-            padding: 0.8rem; /* 内边距 */
-            border: none; /* 去掉默认边框 */
-            border-radius: 4px; /* 圆角 */
-            background-color: rgba(255, 255, 255, 0.1); /* 半透明白色背景 */
-            color: white; /* 白色文字 */
-            font-size: 1rem; /* 字体大小 */
-        }
-
-        /* 输入框获得焦点时的样式 */
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        input[type="tel"]:focus {
-            outline: none; /* 去掉默认轮廓 */
-            background-color: rgba(255, 255, 255, 0.2); /* 更亮一些的背景 */
-        }
-
-        /* 提交按钮样式 */
-        button {
-            padding: 0.8rem 1.5rem; /* 内边距 */
-            background-color: #4CAF50; /* 绿色背景 */
-            color: white; /* 白色文字 */
-            border: none; /* 去掉边框 */
-            border-radius: 4px; /* 圆角 */
-            cursor: pointer; /* 鼠标悬停时变为手型 */
-            font-size: 1rem; /* 字体大小 */
-            transition: background-color 0.3; /* 背景色变化的过渡效果 */
-        }
-
-        /* 按钮悬停效果 */
-        button:hover {
-            background-color: #45a049; /* 按钮悬停时稍暗一些的绿色 */
-        }
-
         /* 版权信息区域样式 */
         footer {
             position: fixed; /* 固定在底部 */
@@ -243,6 +199,8 @@
 </head>
 <body>
     <!-- 背景容器 -->
+    <div id="particles-js" style="position: fixed; width: 100%; height: 100%; z-index: -2;"></div>
+    <!-- 注意：原来的 background-container 保留，但请确保它的 z-index 是 -1 -->
     <div id="background-container"></div>
     
     <!-- 顶部导航栏 -->
@@ -251,7 +209,6 @@
             <li><a href="#home">首页</a></li>
             <li><a href="#history">军团历史</a></li>
             <li><a href="#members">成员介绍</a></li>
-            <li><a href="#join">加入我们</a></li>
             <li class="dropdown">
                 <a href="#links">常用网址</a>
                 <ul class="dropdown-menu">
@@ -275,8 +232,20 @@
                     <img src="images/金羊毛骑士团.jpg" style="width: 60px; height: 60px; border-radius: 15px; margin-right: 10px; border: 2px solid #4CAF50;">
                     <h2>Golden Fleece<br>金羊毛骑士团</h2>
                 </div>
-            </div>
             <p>欢迎来到EVE Online中最传奇的军团之一。我们致力于探索未知星域，征服挑战性的内容，并建立坚不可摧的兄弟情谊。</p>
+            <div style="position: relative; width: 100%; height: 0; padding-bottom: 56.25%; margin: 20px 0;">
+            <iframe 
+                src="//player.bilibili.com/player.html?bvid=BV1xx411c7mD&page=1" 
+                scrolling="no" 
+                border="0" 
+                frameborder="no" 
+                framespacing="0" 
+                allowfullscreen="true" 
+                style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;">
+            </iframe>
+        </div>
+        <p>金羊毛骑士团</p>
+    </div>
         </section>
 
         <!-- 军团历史板块 -->
@@ -384,7 +353,38 @@
             // 根据鼠标位置调整背景的变换
             backgroundContainer.style.transform = `translate(-${x / 10}px, -${y / 10}px)`;
         });
+        // --- 2. Particles.js 粒子背景初始化 ---
+        // 防错处理：确保 particles.js 库已加载完毕再执行
+        if (typeof particlesJS !== 'undefined') {
+            particlesJS('particles-js', {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#4CAF50" }, // 粒子颜色，这里设为军团的绿色
+                "shape": { "type": "circle", "stroke": { "width": 0 } },
+                "opacity": { "value": 0.5, "random": false },
+                "size": { "value": 3, "random": true },
+                "line_linked": { 
+                    "enable": true, 
+                    "distance": 150, 
+                    "color": "#4CAF50", 
+                    "opacity": 0.4, 
+                    "width": 1 
+                },
+                "move": { "enable": true, "speed": 2 }
+            },
+            "interactivity": { 
+                "detect_on": 
+                "canvas", 
+                "events": { 
+                    "onhover": { "enable": true, "mode": "repulse" } 
+                } 
+            },
+            "retina_detect": true
+        });
+    }
     </script>
+    <!-- 在 </body> 之前添加：Particles 和 Glightbox 的 JS -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 </body>
 </html>
 
