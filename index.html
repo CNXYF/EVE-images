@@ -195,6 +195,30 @@
         .dropdown-menu li a:hover {
             background-color: #4CAF50;
         }
+
+        /* PAP 工作台入口 */
+        html { scroll-padding-top: 90px; }
+        body { background-color: #101719; }
+        nav ul { flex-wrap: wrap; justify-content: center; row-gap: .7rem; padding: 0 12px; }
+        .tool-menu { position: relative; }
+        .tool-menu > summary { cursor: pointer; list-style: none; color: #d8ee9a; font-size: 1.2rem; }
+        .tool-menu > summary::-webkit-details-marker { display: none; }
+        .tool-menu > summary span { font-size: .7em; margin-left: .2em; }
+        .tool-menu[open] > .dropdown-menu { display: block; top: calc(100% + 1rem); }
+        .tool-menu a:focus-visible,.tool-menu summary:focus-visible { outline: 2px solid #d8ee9a; outline-offset: 4px; }
+        @media (max-width: 600px) { .tool-menu > summary { font-size: .95rem; } .tool-menu > .dropdown-menu { left: auto; right: 0; min-width: 180px; } }
+        #attendance { border: 1px solid rgba(216,238,154,.35); background: linear-gradient(135deg,rgba(29,44,36,.96),rgba(14,22,26,.94)); }
+        .pap-kicker { color: #d8ee9a; font-size: .78rem; letter-spacing: .14em; margin-bottom: .75rem; }
+        #attendance h2 { color: #d8ee9a; }
+        .pap-intro { max-width: 760px; color: #d9e2dc; }
+        .pap-features { display: flex; flex-wrap: wrap; gap: .65rem; margin: 1.3rem 0; }
+        .pap-features span { border: 1px solid #42534a; border-radius: 5px; padding: .45rem .7rem; color: #d9e2dc; font-size: .9rem; }
+        .pap-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin: 1.5rem 0 1rem; }
+        .pap-primary { display: inline-flex; align-items: center; gap: 1rem; border-radius: 6px; padding: .9rem 1.2rem; background: #d8ee9a; color: #18231b; text-decoration: none; font-weight: bold; }
+        .pap-primary:hover { background: #e9fac1; }
+        .pap-secondary { color: #d8ee9a; text-underline-offset: .25em; }
+        #attendance .pap-note { font-size: .85rem; color: #acbdb2; max-width: 850px; }
+        @media (max-width: 600px) { nav ul { gap: .7rem 1rem; } nav li a { font-size: .95rem; } section { padding: 1.3rem; } #members-list { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -219,6 +243,14 @@
                     <li><a href="https://janice.e-351.com/">Janice估价网站</a></li>
                     <li><a href="https://space.bilibili.com/19017604">金羊毛骑士团B站</a></li>
                 </ul>
+            </li>
+            <li>
+                <details class="tool-menu">
+                    <summary>常用工具 <span aria-hidden="true">▾</span></summary>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://cngff-pap-ledger.craftybison4.chatgpt.site/" target="_blank" rel="noopener noreferrer">PAP 出勤与奖励工具 ↗</a></li>
+                    </ul>
+                </details>
             </li>
         </ul>
     </nav>
@@ -245,7 +277,16 @@
             </iframe>
         </div>
         <p style="text-align: center;">金羊毛骑士团</p>
-    </div>
+        </section>
+
+        <!-- PAP 出勤与奖励工作台 -->
+        <section id="attendance" aria-labelledby="attendance-title">
+            <div class="pap-kicker">CNGFF / FLEET ATTENDANCE</div>
+            <h2 id="attendance-title">每一次集结，都有记录。</h2>
+            <p class="pap-intro">从角色出勤到玩家贡献，在军团工作台统一整理 PAP、活动时长和奖励发放。支持 dscan 名单导入、角色归组与手动补录。</p>
+            <div class="pap-features"><span>北京时间每日 PAP</span><span>半小时计时奖励</span><span>玩家奖励封顶</span><span>出勤与发放编号</span></div>
+            <div class="pap-actions"><a class="pap-primary" href="https://cngff-pap-ledger.craftybison4.chatgpt.site/" target="_blank" rel="noopener noreferrer">进入 PAP 出勤工具 <span aria-hidden="true">↗</span></a></div>
+            <p class="pap-note">点击后在新标签页打开出勤工作台，沿用现有在线版的账本。数据保存在使用工具的浏览器中，不同设备不会自动同步，请定期导出完整备份。</p>
         </section>
 
         <!-- 军团历史板块 -->
@@ -336,6 +377,8 @@
     </p>
 </section>
     
+    </main>
+
     <!-- 版权信息 -->
     <footer>
         <p>&copy; 2023 Golden Fleece 金羊毛骑士团. All rights reserved.</p>
@@ -386,4 +429,5 @@
     </script>
 </body>
 </html>
+
 
